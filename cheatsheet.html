@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cheat Sheet — Frontend Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ─── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:         #0c0c0f;
+  --surface:    #131318;
+  --surface2:   #1a1a22;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.13);
+  --text:       #e8e8f0;
+  --muted:      #6b6b80;
+  --accent:     #7c6aff;
+  --accent2:    #00d4a0;
+  --accent3:    #ff6b6b;
+  --amber:      #ffb347;
+  --mono:       'JetBrains Mono', monospace;
+  --display:    'Syne', sans-serif;
+  --radius:     8px;
+  --radius-lg:  14px;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+/* ─── Nav ────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 52px;
+  background: rgba(12,12,15,0.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.nav-logo { font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: -0.03em; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a {
+  padding: 5px 12px; border-radius: var(--radius);
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  transition: color .15s, background .15s;
+}
+.nav-links a:hover { color: var(--text); background: var(--surface2); }
+
+/* ─── Hero ───────────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 5rem 2rem 3rem;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,106,255,0.12), transparent);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1.25rem;
+  border: 1px solid rgba(124,106,255,0.3);
+  padding: 4px 14px; border-radius: 99px;
+}
+.hero h1 {
+  font-family: var(--display); font-weight: 800; font-size: clamp(42px, 8vw, 80px);
+  letter-spacing: -0.04em; line-height: 1;
+  color: var(--text);
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  margin-top: 1rem; color: var(--muted); font-size: 14px;
+  max-width: 500px; margin-inline: auto;
+}
+.hero-chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+.chip {
+  padding: 4px 12px; border-radius: 99px; font-size: 11px;
+  border: 1px solid var(--border2); color: var(--muted);
+}
+.chip.g { border-color: rgba(0,212,160,0.3); color: var(--accent2); }
+.chip.p { border-color: rgba(124,106,255,0.3); color: var(--accent); }
+.chip.r { border-color: rgba(255,107,107,0.3); color: var(--accent3); }
+.chip.a { border-color: rgba(255,179,71,0.3); color: var(--amber); }
+
+/* ─── Section ───────────────────────────────────────────────── */
+section { padding: 3rem 2rem; max-width: 1100px; margin: 0 auto; }
+.section-header {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 1.75rem; padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-num { font-size: 11px; color: var(--accent); font-weight: 700; }
+.section-title { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; }
+.section-badge {
+  margin-left: auto; font-size: 10px; padding: 3px 10px;
+  border-radius: 99px; border: 1px solid var(--border2); color: var(--muted);
+}
+
+/* ─── Layout Playground ─────────────────────────────────────── */
+.controls-row {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 1.25rem;
+}
+.toggle-group {
+  display: flex; border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden;
+}
+.toggle-btn {
+  padding: 7px 16px; font-size: 12px; font-family: var(--mono);
+  background: transparent; border: none; color: var(--muted);
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.toggle-btn:not(:last-child) { border-right: 1px solid var(--border2); }
+.toggle-btn.active { background: var(--accent); color: #fff; }
+.toggle-btn.active-g { background: var(--accent2); color: #000; }
+
+.preview-shell {
+  border: 1px solid var(--border2); border-radius: var(--radius-lg); overflow: hidden;
+  margin-bottom: 1.25rem; background: var(--surface);
+}
+.preview-bar {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; }
+.dot.r { background: #ff5f57; } .dot.y { background: #ffbd2e; } .dot.g { background: #28ca41; }
+.url-bar { flex: 1; height: 20px; background: var(--bg); border-radius: 4px; border: 1px solid var(--border); }
+.vp-label { font-size: 11px; color: var(--muted); margin-left: auto; }
+.preview-stage {
+  display: flex; justify-content: center; align-items: flex-start;
+  padding: 1.5rem; min-height: 220px; background: var(--bg);
+}
+.device-frame {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius); overflow: hidden;
+  transition: width .3s cubic-bezier(.4,0,.2,1);
+}
+.layout-inner { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
+.blk {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 3px; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--muted);
+}
+.blk.p { background: rgba(124,106,255,0.12); border-color: rgba(124,106,255,0.25); color: var(--accent); }
+.blk.g { background: rgba(0,212,160,0.09); border-color: rgba(0,212,160,0.2); color: var(--accent2); }
+
+.code-panel { border: 1px solid var(--border2); border-radius: var(--radius-lg); overflow: hidden; }
+.code-tabs { display: flex; background: var(--surface2); border-bottom: 1px solid var(--border); }
+.code-tab {
+  padding: 9px 18px; font-size: 12px; font-family: var(--mono);
+  background: transparent; border: none; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s;
+}
+.code-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.code-actions { margin-left: auto; display: flex; align-items: center; padding-right: 12px; gap: 8px; }
+.copy-btn {
+  font-size: 11px; font-family: var(--mono); padding: 4px 10px;
+  background: transparent; border: 1px solid var(--border2); border-radius: var(--radius);
+  color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn.copied { border-color: var(--accent2); color: var(--accent2); }
+.code-block {
+  padding: 1.25rem 1.5rem; background: var(--surface);
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.8;
+  color: #a0a0c0; overflow-x: auto; max-height: 280px; overflow-y: auto;
+}
+.kw { color: #c792ea; } .prop { color: var(--accent2); } .val { color: var(--amber); }
+.cmt { color: #4a4a6a; } .tag { color: #82aaff; } .str { color: #c3e88d; }
+.info-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+.info-pill {
+  font-size: 11px; padding: 4px 12px; border-radius: 99px;
+  border: 1px solid var(--border2); color: var(--muted); background: var(--surface);
+}
+
+/* ─── Card Grid (shared) ─────────────────────────────────────── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.25rem;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--border2); }
+.card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+.card-title .dot-accent { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.card-title .dot-g { background: var(--accent2); }
+.card-title .dot-r { background: var(--accent3); }
+.card-title .dot-a { background: var(--amber); }
+
+/* ─── Property Table ─────────────────────────────────────────── */
+.prop-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.prop-table tr { border-bottom: 1px solid var(--border); }
+.prop-table tr:last-child { border-bottom: none; }
+.prop-table td { padding: 6px 0; vertical-align: top; }
+.prop-table td:first-child { color: var(--accent2); width: 45%; padding-right: 12px; }
+.prop-table td:last-child { color: var(--muted); }
+
+/* ─── Box Model Visual ───────────────────────────────────────── */
+.box-model-vis {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  margin: 1rem auto; width: 260px; height: 180px;
+}
+.bm-layer {
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; font-size: 10px; font-weight: 500;
+}
+.bm-margin  { inset: 0; background: rgba(255,179,71,0.08); border: 2px dashed rgba(255,179,71,0.4); color: var(--amber); }
+.bm-border  { inset: 24px; background: rgba(255,107,107,0.1); border: 2px solid rgba(255,107,107,0.4); color: var(--accent3); }
+.bm-padding { inset: 50px; background: rgba(0,212,160,0.1); border: 2px solid rgba(0,212,160,0.3); color: var(--accent2); }
+.bm-content { inset: 76px; background: rgba(124,106,255,0.15); border: 2px solid rgba(124,106,255,0.4); color: var(--accent); }
+.bm-label {
+  position: absolute; font-size: 9px;
+}
+.bm-label.ml { top: 5px; left: 8px; color: var(--amber); }
+.bm-label.bl { top: 28px; left: 32px; color: var(--accent3); }
+.bm-label.pl { top: 54px; left: 56px; color: var(--accent2); }
+
+/* ─── Flexbox Demo ───────────────────────────────────────────── */
+.flex-demo-container {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px; min-height: 80px;
+  display: flex; transition: all .3s; gap: 8px; flex-wrap: wrap;
+}
+.flex-item {
+  background: rgba(124,106,255,0.15); border: 1px solid rgba(124,106,255,0.3);
+  border-radius: 4px; padding: 8px 14px; font-size: 11px; color: var(--accent);
+  min-width: 40px; text-align: center;
+}
+.flex-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.flex-select {
+  padding: 5px 10px; font-size: 11px; font-family: var(--mono);
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); color: var(--text); cursor: pointer;
+}
+
+/* ─── Colors ─────────────────────────────────────────────────── */
+.color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+.color-swatch {
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--border);
+}
+.swatch-preview { height: 48px; }
+.swatch-info { padding: 8px; background: var(--surface); }
+.swatch-name { font-size: 11px; font-weight: 500; color: var(--text); }
+.swatch-hex  { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* ─── Typography Scale ───────────────────────────────────────── */
+.type-row {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.type-row:last-child { border-bottom: none; }
+.type-label { font-size: 10px; color: var(--muted); width: 80px; flex-shrink: 0; }
+.type-sample { color: var(--text); }
+
+/* ─── Breakpoints ────────────────────────────────────────────── */
+.bp-track {
+  position: relative; height: 48px; background: var(--bg);
+  border-radius: var(--radius); border: 1px solid var(--border); margin: 1rem 0;
+  display: flex; align-items: stretch; overflow: hidden;
+}
+.bp-seg {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500; border-right: 1px solid var(--border2);
+  flex-direction: column; gap: 2px;
+}
+.bp-seg:last-child { border-right: none; }
+.bp-name { color: var(--text); font-size: 10px; }
+.bp-val  { color: var(--muted); font-size: 9px; }
+.seg-xs   { flex: 1; background: rgba(124,106,255,0.1); }
+.seg-sm   { flex: 2; background: rgba(0,212,160,0.08); }
+.seg-md   { flex: 2.5; background: rgba(255,179,71,0.07); }
+.seg-lg   { flex: 3; background: rgba(255,107,107,0.06); }
+.seg-xl   { flex: 2; background: rgba(124,106,255,0.05); }
+
+/* ─── Selector Examples ──────────────────────────────────────── */
+.selector-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.selector-table th {
+  text-align: left; padding: 8px 10px; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+  border-bottom: 1px solid var(--border2);
+}
+.selector-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.selector-table tr:last-child td { border-bottom: none; }
+.selector-table td:first-child { color: var(--accent); font-weight: 500; }
+.selector-table td:nth-child(2) { color: var(--muted); }
+.selector-table td:nth-child(3) { color: var(--accent2); }
+
+/* ─── Position Reference ─────────────────────────────────────── */
+.pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pos-card {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px;
+}
+.pos-card h4 { font-size: 12px; color: var(--accent); margin-bottom: 6px; }
+.pos-card p  { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ─── Units Reference ────────────────────────────────────────── */
+.units-row { display: grid; grid-template-columns: 80px 1fr auto; gap: 12px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.units-row:last-child { border-bottom: none; }
+.unit-name { color: var(--accent2); font-weight: 500; }
+.unit-desc { color: var(--muted); font-size: 11px; }
+.unit-ex   { color: var(--accent); font-size: 11px; }
+
+/* ─── Specificity Meter ──────────────────────────────────────── */
+.spec-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.spec-label { width: 160px; font-size: 11px; color: var(--accent); flex-shrink: 0; }
+.spec-bar-wrap { flex: 1; height: 8px; background: var(--bg); border-radius: 99px; border: 1px solid var(--border); overflow: hidden; }
+.spec-bar { height: 100%; border-radius: 99px; transition: width .6s ease; }
+.spec-val { font-size: 11px; color: var(--muted); width: 50px; text-align: right; }
+
+/* ─── Pseudo Classes ─────────────────────────────────────────── */
+.pseudo-demo {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 12px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border);
+}
+.pseudo-demo a {
+  padding: 5px 12px; border-radius: var(--radius); font-size: 12px;
+  border: 1px solid var(--border2); color: var(--muted); text-decoration: none; transition: all .15s;
+}
+.pseudo-demo a:hover   { color: var(--accent); border-color: var(--accent); background: rgba(124,106,255,0.1); }
+.pseudo-demo a:active  { transform: scale(0.97); }
+.pseudo-demo a.visited { color: var(--accent3); border-color: rgba(255,107,107,0.3); }
+
+/* ─── Animation reference ────────────────────────────────────── */
+.anim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.anim-card {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.anim-box {
+  width: 36px; height: 36px; border-radius: 6px;
+  background: rgba(124,106,255,0.3); border: 1px solid rgba(124,106,255,0.5);
+}
+.anim-label { font-size: 10px; color: var(--muted); text-align: center; }
+@keyframes spin   { to { transform: rotate(360deg); } }
+@keyframes pulse  { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+@keyframes ping   { 0%{transform:scale(1);opacity:1;} 100%{transform:scale(1.8);opacity:0;} }
+@keyframes shake  { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+@keyframes flip   { 0%,100%{transform:rotateY(0);} 50%{transform:rotateY(180deg);} }
+.anim-spin   .anim-box { animation: spin   1.2s linear infinite; }
+.anim-pulse  .anim-box { animation: pulse  1.5s ease-in-out infinite; }
+.anim-bounce .anim-box { animation: bounce 0.9s ease-in-out infinite; }
+.anim-ping   .anim-box { animation: ping   1.2s ease-out infinite; }
+.anim-shake  .anim-box { animation: shake  0.5s ease-in-out infinite; }
+.anim-flip   .anim-box { animation: flip   1s ease-in-out infinite; }
+
+/* ─── Variable table ─────────────────────────────────────────── */
+.var-table { width:100%; border-collapse:collapse; font-size:12px; }
+.var-table tr { border-bottom:1px solid var(--border); }
+.var-table td { padding:7px 0; }
+.var-table td:first-child { color:var(--accent); width:55%; }
+.var-table td:last-child  { color:var(--muted); }
+
+/* ─── Z-index stack ──────────────────────────────────────────── */
+.z-stack { display:flex; flex-direction:column-reverse; gap:4px; }
+.z-layer {
+  padding:8px 14px; border-radius:var(--radius); font-size:11px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border); padding: 2rem;
+  text-align: center; color: var(--muted); font-size: 12px;
+}
+footer span { color: var(--accent); }
+
+/* ─── Utility ────────────────────────────────────────────────── */
+.divider { border:none; border-top:1px solid var(--border); margin: 0.5rem 0 1.5rem; }
+.tag-pill {
+  display:inline-block; padding:2px 9px; border-radius:99px; font-size:10px;
+  border:1px solid var(--border2); color:var(--muted); margin:2px;
+}
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media (max-width:640px) {
+  .two-col { grid-template-columns:1fr; }
+  .pos-grid { grid-template-columns:1fr; }
+  nav .nav-links { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">Cheat<span>//</span>Sheet</div>
+  <div class="nav-links">
+    <a href="#layouts">Layouts</a>
+    <a href="#box-model">Box Model</a>
+    <a href="#flexbox">Flexbox</a>
+    <a href="#selectors">Selectors</a>
+    <a href="#typography">Typography</a>
+    <a href="#colors">Colors</a>
+    <a href="#breakpoints">Breakpoints</a>
+    <a href="#animations">Animations</a>
+    <a href="#units">Units</a>
+    <a href="#variables">Variables</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────── -->
+<div class="hero">
+  <span class="hero-eyebrow">Frontend Reference</span>
+  <h1>Cheat <em>//</em> Sheet</h1>
+  <p class="hero-sub">Everything you need. CSS, layouts, selectors, units, animations — all in one place.</p>
+  <div class="hero-chips">
+    <span class="chip p">CSS Grid</span>
+    <span class="chip g">Flexbox</span>
+    <span class="chip a">Box Model</span>
+    <span class="chip r">Animations</span>
+    <span class="chip p">Selectors</span>
+    <span class="chip g">Units</span>
+    <span class="chip a">Typography</span>
+    <span class="chip r">Breakpoints</span>
+  </div>
+</div>
+
+<!-- ─── 1. LAYOUT PLAYGROUND ─────────────────────────────────── -->
+<section id="layouts">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Layout Playground</h2>
+    <span class="section-badge">Interactive</span>
+  </div>
+
+  <div class="controls-row">
+    <div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.1em">Viewport</div>
+      <div class="toggle-group" id="viewport-group">
+        <button class="toggle-btn active" data-viewport="web">⬛ Web</button>
+        <button class="toggle-btn" data-viewport="tablet">▪ Tablet</button>
+        <button class="toggle-btn" data-viewport="mobile">▫ Mobile</button>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.1em">Layout Type</div>
+      <div class="toggle-group" id="layout-group">
+        <button class="toggle-btn active" data-layout="fluid">~ Fluid</button>
+        <button class="toggle-btn" data-layout="grid">⊞ Grid</button>
+        <button class="toggle-btn" data-layout="holygrail">◧ Holy Grail</button>
+        <button class="toggle-btn" data-layout="cards">⊟ Cards</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-strip" id="info-strip"></div>
+
+  <div class="preview-shell">
+    <div class="preview-bar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <div class="url-bar"></div>
+      <span class="vp-label" id="vp-label">1280px</span>
+    </div>
+    <div class="preview-stage" id="preview-stage"></div>
+  </div>
+
+  <div class="code-panel">
+    <div class="code-tabs">
+      <button class="code-tab active" data-code="html">HTML</button>
+      <button class="code-tab" data-code="css">CSS</button>
+      <div class="code-actions">
+        <button class="copy-btn" id="copy-btn">Copy</button>
+      </div>
+    </div>
+    <pre class="code-block" id="code-display"></pre>
+  </div>
+</section>
+
+<!-- ─── 2. BOX MODEL ──────────────────────────────────────────── -->
+<section id="box-model">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Box Model</h2>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="box-model-vis">
+        <div class="bm-layer bm-margin">
+          <span class="bm-label ml">margin</span>
+          <div class="bm-layer bm-border">
+            <span class="bm-label bl">border</span>
+            <div class="bm-layer bm-padding">
+              <span class="bm-label pl">padding</span>
+              <div class="bm-layer bm-content">content</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <table class="prop-table">
+        <tr><td>box-sizing: content-box</td><td>Width = content only. Padding &amp; border added on top.</td></tr>
+        <tr><td>box-sizing: border-box</td><td>Width includes padding &amp; border. Recommended default.</td></tr>
+        <tr><td>margin: auto</td><td>Centers a block element horizontally.</td></tr>
+        <tr><td>padding: 1rem 2rem</td><td>Shorthand: top/bottom, left/right.</td></tr>
+        <tr><td>border: 1px solid #ccc</td><td>Width, style, color shorthand.</td></tr>
+        <tr><td>outline</td><td>Like border but doesn't affect layout.</td></tr>
+        <tr><td>overflow: hidden</td><td>Clips content, clears floats.</td></tr>
+        <tr><td>visibility: hidden</td><td>Hidden but still takes up space.</td></tr>
+        <tr><td>display: none</td><td>Removed from layout entirely.</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="code-panel" style="margin-top:1rem">
+    <div class="code-tabs"><button class="code-tab active">CSS</button><div class="code-actions"><button class="copy-btn" onclick="copyText('*, *::before, *::after { box-sizing: border-box; }\n.box {\n  width: 300px;\n  padding: 1rem 1.5rem;\n  border: 2px solid #7c6aff;\n  margin: 0 auto;\n  /* Total width = 300px (border-box) */\n}')">Copy</button></div></div>
+    <pre class="code-block"><span class="cmt">/* Universal border-box reset (recommended) */</span>
+<span class="tag">*</span>, <span class="tag">*::before</span>, <span class="tag">*::after</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+}
+<span class="tag">.box</span> {
+  <span class="prop">width</span>: <span class="val">300px</span>;
+  <span class="prop">padding</span>: <span class="val">1rem 1.5rem</span>;
+  <span class="prop">border</span>: <span class="val">2px solid #7c6aff</span>;
+  <span class="prop">margin</span>: <span class="val">0 auto</span>;
+  <span class="cmt">/* Total width = 300px (border-box) */</span>
+}</pre>
+  </div>
+</section>
+
+<!-- ─── 3. FLEXBOX ────────────────────────────────────────────── -->
+<section id="flexbox">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Flexbox</h2>
+    <span class="section-badge">Interactive</span>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot-accent"></span> Container Properties</div>
+      <table class="prop-table">
+        <tr><td>display: flex</td><td>Activates flex context</td></tr>
+        <tr><td>flex-direction</td><td>row | column | row-reverse | column-reverse</td></tr>
+        <tr><td>justify-content</td><td>Main axis alignment</td></tr>
+        <tr><td>align-items</td><td>Cross axis alignment</td></tr>
+        <tr><td>flex-wrap</td><td>nowrap | wrap | wrap-reverse</td></tr>
+        <tr><td>gap</td><td>Space between items</td></tr>
+        <tr><td>align-content</td><td>Multi-line cross alignment</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot-accent dot-g"></span> Item Properties</div>
+      <table class="prop-table">
+        <tr><td>flex: 1</td><td>Shorthand: grow shrink basis</td></tr>
+        <tr><td>flex-grow</td><td>How much item grows to fill space</td></tr>
+        <tr><td>flex-shrink</td><td>How much item shrinks if needed</td></tr>
+        <tr><td>flex-basis</td><td>Initial size before growing/shrinking</td></tr>
+        <tr><td>align-self</td><td>Override align-items for one item</td></tr>
+        <tr><td>order</td><td>Visual order (default: 0)</td></tr>
+        <tr><td>min-width: 0</td><td>Allows flex items to shrink below content size</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:1.25rem">
+    <div class="flex-controls">
+      <div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">justify-content</div>
+        <select class="flex-select" id="flex-justify" onchange="updateFlexDemo()">
+          <option>flex-start</option><option>flex-end</option><option selected>center</option>
+          <option>space-between</option><option>space-around</option><option>space-evenly</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">align-items</div>
+        <select class="flex-select" id="flex-align" onchange="updateFlexDemo()">
+          <option>stretch</option><option>flex-start</option><option selected>center</option>
+          <option>flex-end</option><option>baseline</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">flex-direction</div>
+        <select class="flex-select" id="flex-dir" onchange="updateFlexDemo()">
+          <option selected>row</option><option>column</option><option>row-reverse</option><option>column-reverse</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">flex-wrap</div>
+        <select class="flex-select" id="flex-wrap" onchange="updateFlexDemo()">
+          <option>nowrap</option><option selected>wrap</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex-demo-container" id="flex-demo" style="height:100px;justify-content:center;align-items:center;">
+      <div class="flex-item">A</div>
+      <div class="flex-item" style="padding:12px 14px;">B</div>
+      <div class="flex-item">C</div>
+      <div class="flex-item" style="padding:6px 20px;">D</div>
+      <div class="flex-item">E</div>
+    </div>
+    <div class="code-panel" style="margin-top:10px">
+      <div class="code-tabs"><button class="code-tab active">Generated CSS</button><div class="code-actions"><button class="copy-btn" id="flex-copy-btn" onclick="copyFlexCode()">Copy</button></div></div>
+      <pre class="code-block" id="flex-code-out"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 4. CSS SELECTORS ──────────────────────────────────────── -->
+<section id="selectors">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">CSS Selectors</h2>
+  </div>
+  <div class="two-col">
+    <div>
+      <table class="selector-table">
+        <thead><tr><th>Selector</th><th>Description</th><th>Specificity</th></tr></thead>
+        <tbody>
+          <tr><td>*</td><td>Universal</td><td>(0,0,0)</td></tr>
+          <tr><td>div</td><td>Type / element</td><td>(0,0,1)</td></tr>
+          <tr><td>.class</td><td>Class</td><td>(0,1,0)</td></tr>
+          <tr><td>#id</td><td>ID</td><td>(1,0,0)</td></tr>
+          <tr><td>[attr]</td><td>Attribute</td><td>(0,1,0)</td></tr>
+          <tr><td>:hover</td><td>Pseudo-class</td><td>(0,1,0)</td></tr>
+          <tr><td>::before</td><td>Pseudo-element</td><td>(0,0,1)</td></tr>
+          <tr><td>div > p</td><td>Direct child</td><td>combined</td></tr>
+          <tr><td>div p</td><td>Descendant</td><td>combined</td></tr>
+          <tr><td>div + p</td><td>Adjacent sibling</td><td>combined</td></tr>
+          <tr><td>div ~ p</td><td>General sibling</td><td>combined</td></tr>
+          <tr><td>:not(.x)</td><td>Negation</td><td>(0,1,0)</td></tr>
+          <tr><td>:nth-child(n)</td><td>Nth child</td><td>(0,1,0)</td></tr>
+          <tr><td>:is()</td><td>Matches-any</td><td>highest arg</td></tr>
+          <tr><td>:where()</td><td>Like :is() — zero specificity</td><td>(0,0,0)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title"><span class="dot-accent dot-a"></span> Specificity Scale</div>
+        <div class="spec-row"><span class="spec-label">!important</span><div class="spec-bar-wrap"><div class="spec-bar" style="width:100%;background:#ff6b6b;"></div></div><span class="spec-val">∞</span></div>
+        <div class="spec-row"><span class="spec-label">#id</span><div class="spec-bar-wrap"><div class="spec-bar" style="width:80%;background:var(--amber);"></div></div><span class="spec-val">(1,0,0)</span></div>
+        <div class="spec-row"><span class="spec-label">.class / :pseudo</span><div class="spec-bar-wrap"><div class="spec-bar" style="width:50%;background:var(--accent);"></div></div><span class="spec-val">(0,1,0)</span></div>
+        <div class="spec-row"><span class="spec-label">element</span><div class="spec-bar-wrap"><div class="spec-bar" style="width:20%;background:var(--accent2);"></div></div><span class="spec-val">(0,0,1)</span></div>
+        <div class="spec-row"><span class="spec-label">* universal</span><div class="spec-bar-wrap"><div class="spec-bar" style="width:5%;background:var(--muted);"></div></div><span class="spec-val">(0,0,0)</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot-accent dot-g"></span> Pseudo-classes (try hover)</div>
+        <div class="pseudo-demo">
+          <a href="#">:link</a>
+          <a href="#" class="visited">:visited</a>
+          <a href="#">:hover me</a>
+          <a href="#">:focus me</a>
+          <a href="#">:active</a>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+          Common: <span class="tag-pill">:first-child</span><span class="tag-pill">:last-child</span><span class="tag-pill">:nth-child(2n)</span><span class="tag-pill">:not(.x)</span><span class="tag-pill">:empty</span><span class="tag-pill">:checked</span><span class="tag-pill">:disabled</span><span class="tag-pill">:focus-visible</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 5. TYPOGRAPHY ─────────────────────────────────────────── -->
+<section id="typography">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Typography</h2>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot-accent"></span> Type Scale</div>
+      <div class="type-row"><span class="type-label">text-xs — 12px</span><span class="type-sample" style="font-size:12px">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">text-sm — 14px</span><span class="type-sample" style="font-size:14px">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">base — 16px</span><span class="type-sample" style="font-size:16px">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">text-lg — 18px</span><span class="type-sample" style="font-size:18px">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">text-xl — 20px</span><span class="type-sample" style="font-size:20px">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">2xl — 24px</span><span class="type-sample" style="font-size:24px">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">3xl — 30px</span><span class="type-sample" style="font-size:30px;letter-spacing:-.02em">The quick brown fox</span></div>
+      <div class="type-row"><span class="type-label">4xl — 36px</span><span class="type-sample" style="font-size:36px;letter-spacing:-.03em">The quick</span></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title"><span class="dot-accent dot-g"></span> Key Properties</div>
+        <table class="prop-table">
+          <tr><td>font-size</td><td>px, rem, em, vw, clamp()</td></tr>
+          <tr><td>font-weight</td><td>100–900, or keyword</td></tr>
+          <tr><td>line-height</td><td>1.5–1.7 for body, 1.1 for headings</td></tr>
+          <tr><td>letter-spacing</td><td>Negative on headings, positive on labels</td></tr>
+          <tr><td>text-transform</td><td>uppercase | lowercase | capitalize</td></tr>
+          <tr><td>font-variant-numeric</td><td>tabular-nums for monospaced digits</td></tr>
+          <tr><td>text-overflow: ellipsis</td><td>Truncate with …</td></tr>
+          <tr><td>-webkit-line-clamp</td><td>Multi-line truncation</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot-accent dot-a"></span> Fluid Type — clamp()</div>
+        <pre class="code-block" style="border-radius:var(--radius);font-size:11.5px;max-height:none"><span class="cmt">/* Scales between 18px and 36px */</span>
+<span class="prop">font-size</span>: <span class="val">clamp(1.125rem, 4vw, 2.25rem)</span>;
+
+<span class="cmt">/* Formula: clamp(min, preferred, max) */</span>
+<span class="cmt">/* preferred = viewport-relative size   */</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 6. COLORS ─────────────────────────────────────────────── -->
+<section id="colors">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">CSS Color Formats</h2>
+  </div>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch-preview" style="background:#7c6aff"></div><div class="swatch-info"><div class="swatch-name">Hex</div><div class="swatch-hex">#7c6aff</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:rgb(124,106,255)"></div><div class="swatch-info"><div class="swatch-name">RGB</div><div class="swatch-hex">rgb(124,106,255)</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:rgba(124,106,255,0.5)"></div><div class="swatch-info"><div class="swatch-name">RGBA</div><div class="swatch-hex">rgba(124,106,255,0.5)</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:hsl(248,100%,71%)"></div><div class="swatch-info"><div class="swatch-name">HSL</div><div class="swatch-hex">hsl(248,100%,71%)</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:oklch(70% 0.2 280)"></div><div class="swatch-info"><div class="swatch-name">OKLCH</div><div class="swatch-hex">oklch(70% 0.2 280)</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:color-mix(in oklch, #7c6aff 60%, #00d4a0)"></div><div class="swatch-info"><div class="swatch-name">color-mix()</div><div class="swatch-hex">60% purple + teal</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:currentColor;border:4px solid #00d4a0"></div><div class="swatch-info"><div class="swatch-name">currentColor</div><div class="swatch-hex">inherits color prop</div></div></div>
+    <div class="color-swatch"><div class="swatch-preview" style="background:transparent;border:1px dashed var(--border2)"></div><div class="swatch-info"><div class="swatch-name">transparent</div><div class="swatch-hex">rgba(0,0,0,0)</div></div></div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <div class="card-title"><span class="dot-accent dot-g"></span> OKLCH — The Modern Color Space</div>
+    <pre class="code-block" style="border-radius:var(--radius);max-height:none;font-size:12px"><span class="cmt">/* oklch(lightness% chroma hue) */</span>
+<span class="prop">color</span>: <span class="val">oklch(60% 0.25 280)</span>;    <span class="cmt">/* purple */</span>
+<span class="prop">color</span>: <span class="val">oklch(70% 0.18 160)</span>;    <span class="cmt">/* teal   */</span>
+<span class="prop">color</span>: <span class="val">oklch(80% 0.15 40)</span>;     <span class="cmt">/* amber  */</span>
+
+<span class="cmt">/* color-mix() — native CSS blending */</span>
+<span class="prop">background</span>: <span class="val">color-mix(in oklch, var(--accent) 60%, var(--accent2))</span>;</pre>
+  </div>
+</section>
+
+<!-- ─── 7. BREAKPOINTS ────────────────────────────────────────── -->
+<section id="breakpoints">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Breakpoints</h2>
+  </div>
+  <div class="bp-track">
+    <div class="bp-seg seg-xs" style="flex:1"><span class="bp-name">xs</span><span class="bp-val">&lt;480px</span></div>
+    <div class="bp-seg seg-sm" style="flex:2"><span class="bp-name">sm</span><span class="bp-val">480–768px</span></div>
+    <div class="bp-seg seg-md" style="flex:2.5"><span class="bp-name">md</span><span class="bp-val">768–1024px</span></div>
+    <div class="bp-seg seg-lg" style="flex:3"><span class="bp-name">lg</span><span class="bp-val">1024–1280px</span></div>
+    <div class="bp-seg seg-xl" style="flex:2"><span class="bp-name">xl</span><span class="bp-val">1280px+</span></div>
+  </div>
+  <div class="two-col" style="margin-top:1rem">
+    <div class="code-panel">
+      <div class="code-tabs"><button class="code-tab active">Mobile-First</button></div>
+      <pre class="code-block" style="max-height:none"><span class="cmt">/* Base = mobile */</span>
+<span class="tag">.container</span> { <span class="prop">padding</span>: <span class="val">1rem</span>; }
+
+<span class="cmt">/* Tablet ≥ 768px */</span>
+<span class="kw">@media</span> (min-width: <span class="val">768px</span>) {
+  <span class="tag">.container</span> { <span class="prop">padding</span>: <span class="val">2rem</span>; }
+}
+
+<span class="cmt">/* Desktop ≥ 1024px */</span>
+<span class="kw">@media</span> (min-width: <span class="val">1024px</span>) {
+  <span class="tag">.container</span> {
+    <span class="prop">max-width</span>: <span class="val">1200px</span>;
+    <span class="prop">margin</span>: <span class="val">0 auto</span>;
+  }
+}</pre>
+    </div>
+    <div class="code-panel">
+      <div class="code-tabs"><button class="code-tab active">Container Query (modern)</button></div>
+      <pre class="code-block" style="max-height:none"><span class="cmt">/* Define container */</span>
+<span class="tag">.card-wrapper</span> {
+  <span class="prop">container-type</span>: <span class="val">inline-size</span>;
+  <span class="prop">container-name</span>: <span class="val">card</span>;
+}
+
+<span class="cmt">/* Query the container, not viewport */</span>
+<span class="kw">@container</span> card (min-width: <span class="val">400px</span>) {
+  <span class="tag">.card</span> {
+    <span class="prop">display</span>: <span class="val">grid</span>;
+    <span class="prop">grid-template-columns</span>: <span class="val">auto 1fr</span>;
+  }
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 8. POSITIONING ────────────────────────────────────────── -->
+<section id="positioning">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Positioning &amp; Z-Index</h2>
+  </div>
+  <div class="pos-grid">
+    <div class="pos-card"><h4>static</h4><p>Default. Follows normal document flow. top/left/etc. have no effect.</p></div>
+    <div class="pos-card"><h4>relative</h4><p>Stays in flow, but top/left offset it from its original position. Creates stacking context.</p></div>
+    <div class="pos-card"><h4>absolute</h4><p>Removed from flow. Positioned relative to nearest non-static ancestor.</p></div>
+    <div class="pos-card"><h4>fixed</h4><p>Removed from flow. Positioned relative to viewport. Stays on scroll.</p></div>
+    <div class="pos-card"><h4>sticky</h4><p>Relative until scroll threshold, then acts like fixed. Needs overflow: scroll on ancestor.</p></div>
+    <div class="pos-card"><h4>z-index</h4><p>Controls stacking order. Only works on positioned or flex/grid items. Higher = on top.</p></div>
+  </div>
+  <div style="margin-top:1.25rem">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Common z-index scale</div>
+    <div class="z-stack">
+      <div class="z-layer" style="background:rgba(124,106,255,0.07);border:1px solid rgba(124,106,255,0.15)"><span>Base content</span><code style="color:var(--accent);font-size:11px">z-index: 0</code></div>
+      <div class="z-layer" style="background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.2)"><span>Dropdown / Popover</span><code style="color:var(--accent);font-size:11px">z-index: 100</code></div>
+      <div class="z-layer" style="background:rgba(124,106,255,0.18);border:1px solid rgba(124,106,255,0.3)"><span>Sticky header</span><code style="color:var(--accent);font-size:11px">z-index: 200</code></div>
+      <div class="z-layer" style="background:rgba(124,106,255,0.25);border:1px solid rgba(124,106,255,0.4)"><span>Modal overlay</span><code style="color:var(--accent);font-size:11px">z-index: 300</code></div>
+      <div class="z-layer" style="background:rgba(124,106,255,0.33);border:1px solid rgba(124,106,255,0.55)"><span>Toast / Notification</span><code style="color:var(--accent);font-size:11px">z-index: 400</code></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 9. ANIMATIONS ─────────────────────────────────────────── -->
+<section id="animations">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Animations &amp; Transitions</h2>
+  </div>
+  <div class="anim-grid">
+    <div class="anim-card anim-spin"><div class="anim-box"></div><span class="anim-label">spin</span></div>
+    <div class="anim-card anim-pulse"><div class="anim-box"></div><span class="anim-label">pulse</span></div>
+    <div class="anim-card anim-bounce"><div class="anim-box"></div><span class="anim-label">bounce</span></div>
+    <div class="anim-card anim-ping"><div class="anim-box"></div><span class="anim-label">ping</span></div>
+    <div class="anim-card anim-shake"><div class="anim-box"></div><span class="anim-label">shake</span></div>
+    <div class="anim-card anim-flip"><div class="anim-box"></div><span class="anim-label">flip</span></div>
+  </div>
+  <div class="two-col" style="margin-top:1.25rem">
+    <div class="code-panel">
+      <div class="code-tabs"><button class="code-tab active">@keyframes</button></div>
+      <pre class="code-block" style="max-height:none"><span class="kw">@keyframes</span> slideIn {
+  <span class="val">from</span> {
+    <span class="prop">transform</span>: <span class="val">translateY(-20px)</span>;
+    <span class="prop">opacity</span>: <span class="val">0</span>;
+  }
+  <span class="val">to</span> {
+    <span class="prop">transform</span>: <span class="val">translateY(0)</span>;
+    <span class="prop">opacity</span>: <span class="val">1</span>;
+  }
+}
+<span class="tag">.modal</span> {
+  <span class="prop">animation</span>: <span class="val">slideIn 0.3s ease forwards</span>;
+}</pre>
+    </div>
+    <div class="code-panel">
+      <div class="code-tabs"><button class="code-tab active">transition</button></div>
+      <pre class="code-block" style="max-height:none"><span class="cmt">/* Transition shorthand */</span>
+<span class="tag">.btn</span> {
+  <span class="prop">transition</span>: <span class="val">all 0.2s ease</span>;
+}
+
+<span class="cmt">/* Multiple properties */</span>
+<span class="tag">.card</span> {
+  <span class="prop">transition</span>:
+    <span class="val">transform 0.2s ease</span>,
+    <span class="val">box-shadow 0.2s ease</span>,
+    <span class="val">opacity 0.15s linear</span>;
+}
+
+<span class="cmt">/* Easing keywords */</span>
+<span class="cmt">/* ease | ease-in | ease-out */</span>
+<span class="cmt">/* ease-in-out | linear       */</span>
+<span class="cmt">/* cubic-bezier(x1,y1,x2,y2) */</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 10. UNITS ─────────────────────────────────────────────── -->
+<section id="units">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2 class="section-title">CSS Units</h2>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot-accent"></span> Absolute &amp; Relative</div>
+      <div class="units-row"><span class="unit-name">px</span><span class="unit-desc">Pixels. Fixed. Screen baseline.</span><span class="unit-ex">border: 1px</span></div>
+      <div class="units-row"><span class="unit-name">rem</span><span class="unit-desc">Root em. Relative to &lt;html&gt; font-size (16px).</span><span class="unit-ex">padding: 1rem</span></div>
+      <div class="units-row"><span class="unit-name">em</span><span class="unit-desc">Relative to parent element's font-size.</span><span class="unit-ex">margin: 1.5em</span></div>
+      <div class="units-row"><span class="unit-name">%</span><span class="unit-desc">Percentage of parent's dimension.</span><span class="unit-ex">width: 50%</span></div>
+      <div class="units-row"><span class="unit-name">vw</span><span class="unit-desc">1% of viewport width.</span><span class="unit-ex">font-size: 5vw</span></div>
+      <div class="units-row"><span class="unit-name">vh</span><span class="unit-desc">1% of viewport height.</span><span class="unit-ex">height: 100vh</span></div>
+      <div class="units-row"><span class="unit-name">dvh</span><span class="unit-desc">Dynamic viewport height. Accounts for mobile browser chrome.</span><span class="unit-ex">height: 100dvh</span></div>
+      <div class="units-row"><span class="unit-name">ch</span><span class="unit-desc">Width of the "0" glyph in current font.</span><span class="unit-ex">max-width: 65ch</span></div>
+      <div class="units-row"><span class="unit-name">fr</span><span class="unit-desc">Fraction unit. Grid only.</span><span class="unit-ex">1fr 2fr 1fr</span></div>
+      <div class="units-row"><span class="unit-name">clamp</span><span class="unit-desc">min / preferred / max fluid range.</span><span class="unit-ex">clamp(1rem,5vw,3rem)</span></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title"><span class="dot-accent dot-r"></span> When to use what</div>
+        <table class="prop-table">
+          <tr><td>Font sizes</td><td>rem (accessible, scales with user preference)</td></tr>
+          <tr><td>Spacing / padding</td><td>rem or px for small values</td></tr>
+          <tr><td>Component widths</td><td>% or ch (content-relative)</td></tr>
+          <tr><td>Full-screen sections</td><td>100dvh (mobile-safe)</td></tr>
+          <tr><td>Grid columns</td><td>fr + minmax()</td></tr>
+          <tr><td>Borders / shadows</td><td>px (stay sharp at any zoom)</td></tr>
+          <tr><td>Responsive headings</td><td>clamp()</td></tr>
+        </table>
+      </div>
+      <div class="code-panel">
+        <div class="code-tabs"><button class="code-tab active">rem baseline setup</button></div>
+        <pre class="code-block" style="max-height:none"><span class="cmt">/* 1rem = 10px trick */</span>
+<span class="tag">html</span> { <span class="prop">font-size</span>: <span class="val">62.5%</span>; }
+<span class="tag">body</span> { <span class="prop">font-size</span>: <span class="val">1.6rem</span>; } <span class="cmt">/* = 16px */</span>
+
+<span class="cmt">/* Now: 1.4rem = 14px, 2rem = 20px */</span>
+<span class="tag">h1</span>   { <span class="prop">font-size</span>: <span class="val">3.6rem</span>; } <span class="cmt">/* 36px */</span>
+<span class="tag">h2</span>   { <span class="prop">font-size</span>: <span class="val">2.4rem</span>; } <span class="cmt">/* 24px */</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 11. CSS VARIABLES ─────────────────────────────────────── -->
+<section id="variables">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2 class="section-title">CSS Custom Properties</h2>
+  </div>
+  <div class="two-col">
+    <div class="code-panel">
+      <div class="code-tabs"><button class="code-tab active">Definition &amp; Usage</button></div>
+      <pre class="code-block" style="max-height:none"><span class="cmt">/* Define on :root for global scope */</span>
+<span class="tag">:root</span> {
+  <span class="prop">--color-primary</span>:   <span class="val">#7c6aff</span>;
+  <span class="prop">--color-surface</span>:   <span class="val">#131318</span>;
+  <span class="prop">--space-sm</span>:        <span class="val">0.5rem</span>;
+  <span class="prop">--space-md</span>:        <span class="val">1rem</span>;
+  <span class="prop">--radius</span>:          <span class="val">8px</span>;
+  <span class="prop">--transition</span>:      <span class="val">all 0.2s ease</span>;
+}
+
+<span class="cmt">/* Use with var() */</span>
+<span class="tag">.button</span> {
+  <span class="prop">background</span>: <span class="val">var(--color-primary)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--radius)</span>;
+  <span class="prop">padding</span>: <span class="val">var(--space-sm) var(--space-md)</span>;
+  <span class="prop">transition</span>: <span class="val">var(--transition)</span>;
+}
+
+<span class="cmt">/* Fallback value */</span>
+<span class="prop">color</span>: <span class="val">var(--missing, #ff6b6b)</span>;
+
+<span class="cmt">/* Override in local scope */</span>
+<span class="tag">.dark-section</span> {
+  <span class="prop">--color-primary</span>: <span class="val">#a89bff</span>;
+}</pre>
+    </div>
+    <div>
+      <div class="code-panel" style="margin-bottom:1rem">
+        <div class="code-tabs"><button class="code-tab active">Dynamic with JS</button></div>
+        <pre class="code-block" style="max-height:none"><span class="cmt">// Read a CSS variable</span>
+<span class="kw">const</span> val = getComputedStyle(document.documentElement)
+  .getPropertyValue(<span class="str">'--color-primary'</span>);
+
+<span class="cmt">// Set a CSS variable</span>
+document.documentElement.style
+  .setProperty(<span class="str">'--color-primary'</span>, <span class="str">'#ff6b6b'</span>);
+
+<span class="cmt">// Theme toggle</span>
+<span class="kw">const</span> toggle = () => {
+  document.documentElement
+    .classList.toggle(<span class="str">'dark'</span>);
+};</pre>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot-accent dot-a"></span> Design Token Pattern</div>
+        <table class="var-table">
+          <tr><td>--color-brand-*</td><td>Primary palette</td></tr>
+          <tr><td>--color-surface-*</td><td>Background layers</td></tr>
+          <tr><td>--color-text-*</td><td>Foreground/typography</td></tr>
+          <tr><td>--space-* (xs→2xl)</td><td>Spacing scale</td></tr>
+          <tr><td>--radius-* (sm→xl)</td><td>Border radius scale</td></tr>
+          <tr><td>--shadow-* (sm→xl)</td><td>Elevation scale</td></tr>
+          <tr><td>--font-* (sans/mono/serif)</td><td>Font stacks</td></tr>
+          <tr><td>--duration-* (fast/base/slow)</td><td>Animation timings</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 12. CSS GRID REFERENCE ────────────────────────────────── -->
+<section id="grid-ref">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2 class="section-title">CSS Grid Reference</h2>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot-accent"></span> Container Properties</div>
+      <table class="prop-table">
+        <tr><td>display: grid</td><td>Activates grid layout</td></tr>
+        <tr><td>grid-template-columns</td><td>Column track sizes</td></tr>
+        <tr><td>grid-template-rows</td><td>Row track sizes</td></tr>
+        <tr><td>grid-template-areas</td><td>Named area layout</td></tr>
+        <tr><td>gap / column-gap / row-gap</td><td>Gutter sizes</td></tr>
+        <tr><td>repeat(3, 1fr)</td><td>3 equal columns</td></tr>
+        <tr><td>minmax(200px, 1fr)</td><td>Min 200px, grows to fill</td></tr>
+        <tr><td>auto-fill vs auto-fit</td><td>auto-fill keeps empty tracks; auto-fit collapses them</td></tr>
+        <tr><td>justify-items / align-items</td><td>Cell content alignment</td></tr>
+        <tr><td>place-items: center</td><td>Shorthand for justify + align</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot-accent dot-g"></span> Item Properties</div>
+      <table class="prop-table">
+        <tr><td>grid-column: 1 / 3</td><td>Span from line 1 to 3</td></tr>
+        <tr><td>grid-column: span 2</td><td>Span 2 columns</td></tr>
+        <tr><td>grid-row: 1 / -1</td><td>Full height (first to last line)</td></tr>
+        <tr><td>grid-area: header</td><td>Reference a named area</td></tr>
+        <tr><td>justify-self</td><td>Override cell horizontal alignment</td></tr>
+        <tr><td>align-self</td><td>Override cell vertical alignment</td></tr>
+        <tr><td>place-self: center</td><td>Center item in cell</td></tr>
+      </table>
+      <hr class="divider" />
+      <div class="card-title" style="margin-top:0.5rem"><span class="dot-accent dot-r"></span> Responsive auto-fit pattern</div>
+      <pre class="code-block" style="border-radius:var(--radius);max-height:none;font-size:11.5px"><span class="tag">.grid</span> {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>:
+    <span class="val">repeat(auto-fit, minmax(240px, 1fr))</span>;
+  <span class="prop">gap</span>: <span class="val">1rem</span>;
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="nav-logo" style="margin-bottom:0.5rem;font-size:22px">Cheat<span>//</span>Sheet</div>
+  <p>Frontend Reference — CSS, Layouts, Selectors, Animations &amp; More</p>
+  <p style="margin-top:0.5rem;font-size:11px">Open-source knowledge. Yours to use.</p>
+</footer>
+
+<script>
+// ─── Layout Playground ───────────────────────────────────────
+const lstate = { viewport: 'web', layout: 'fluid', code: 'html' };
+
+const vpSizes  = { web: '100%', tablet: '420px', mobile: '240px' };
+const vpHeights = { web: '190px', tablet: '210px', mobile: '250px' };
+const vpLabels  = { web: '1280px', tablet: '768px', mobile: '375px' };
+
+const defs = {
+  fluid: {
+    pills: ['display: flex', 'flex-wrap: wrap', 'gap: 1rem'],
+    preview(vp) {
+      if (vp === 'mobile') return `
+        <div class="blk p" style="height:28px;width:100%">header</div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1">
+          <div class="blk" style="height:80px;width:100%">main</div>
+          <div class="blk" style="height:48px;width:100%">sidebar</div>
+        </div>
+        <div class="blk g" style="height:24px;width:100%">footer</div>`;
+      if (vp === 'tablet') return `
+        <div class="blk p" style="height:26px;width:100%">header</div>
+        <div style="display:flex;gap:4px;flex:1">
+          <div class="blk" style="flex:2;height:100px">main</div>
+          <div class="blk" style="flex:1;height:100px">aside</div>
+        </div>
+        <div class="blk g" style="height:22px;width:100%">footer</div>`;
+      return `
+        <div class="blk p" style="height:24px;width:100%">header</div>
+        <div style="display:flex;gap:4px;flex:1">
+          <div class="blk" style="width:100px;height:90px">sidebar</div>
+          <div class="blk" style="flex:1;height:90px">main</div>
+          <div class="blk" style="width:70px;height:90px">aside</div>
+        </div>
+        <div class="blk g" style="height:20px;width:100%">footer</div>`;
+    },
+    html(vp) {
+      if (vp === 'mobile') return `<span class="cmt">&lt;!-- Mobile: stacked flexbox --&gt;</span>
+<span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"wrap"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;header&gt;</span>Header<span class="tag">&lt;/header&gt;</span>
+  <span class="tag">&lt;main&gt;</span>Main Content<span class="tag">&lt;/main&gt;</span>
+  <span class="tag">&lt;aside&gt;</span>Sidebar<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>Footer<span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`;
+      if (vp === 'tablet') return `<span class="cmt">&lt;!-- Tablet: flex row body --&gt;</span>
+<span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"wrap"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;header&gt;</span>Header<span class="tag">&lt;/header&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;main&gt;</span>Main<span class="tag">&lt;/main&gt;</span>
+    <span class="tag">&lt;aside&gt;</span>Aside<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>Footer<span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`;
+      return `<span class="cmt">&lt;!-- Web: sidebar + main + aside --&gt;</span>
+<span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"wrap"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;header&gt;</span>Header<span class="tag">&lt;/header&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"row"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;nav</span> <span class="prop">class</span>=<span class="str">"sidebar"</span><span class="tag">&gt;</span>Sidebar<span class="tag">&lt;/nav&gt;</span>
+    <span class="tag">&lt;main&gt;</span>Main Content<span class="tag">&lt;/main&gt;</span>
+    <span class="tag">&lt;aside&gt;</span>Aside<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>Footer<span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`;
+    },
+    css(vp) {
+      if (vp === 'mobile') return `.wrap {
+  <span class="prop">display</span>: <span class="val">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="val">column</span>;
+  <span class="prop">gap</span>: <span class="val">1rem</span>;
+  <span class="prop">min-height</span>: <span class="val">100dvh</span>;
+  <span class="prop">padding</span>: <span class="val">1rem</span>;
+}`;
+      if (vp === 'tablet') return `.wrap { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">flex-direction</span>: <span class="val">column</span>; <span class="prop">gap</span>: <span class="val">1rem</span>; }
+.row  { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">gap</span>: <span class="val">1rem</span>; }
+<span class="tag">main</span> { <span class="prop">flex</span>: <span class="val">2</span>; }
+<span class="tag">aside</span>{ <span class="prop">flex</span>: <span class="val">1</span>; }
+<span class="kw">@media</span> (max-width: <span class="val">600px</span>) {
+  .row { <span class="prop">flex-direction</span>: <span class="val">column</span>; }
+}`;
+      return `.wrap { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">flex-direction</span>: <span class="val">column</span>; <span class="prop">gap</span>: <span class="val">1rem</span>; <span class="prop">max-width</span>: <span class="val">1200px</span>; <span class="prop">margin</span>: <span class="val">0 auto</span>; }
+.row     { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">gap</span>: <span class="val">1rem</span>; }
+.sidebar { <span class="prop">width</span>: <span class="val">220px</span>; <span class="prop">flex-shrink</span>: <span class="val">0</span>; }
+<span class="tag">main</span>     { <span class="prop">flex</span>: <span class="val">1</span>; }
+<span class="tag">aside</span>    { <span class="prop">width</span>: <span class="val">180px</span>; <span class="prop">flex-shrink</span>: <span class="val">0</span>; }`;
+    }
+  },
+  grid: {
+    pills: ['display: grid', 'grid-template-areas', 'gap: 1rem'],
+    preview(vp) {
+      if (vp === 'mobile') return `
+        <div style="display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr auto auto;gap:4px;width:100%;height:100%">
+          <div class="blk p" style="height:28px">header</div>
+          <div class="blk" style="height:80px">main</div>
+          <div class="blk" style="height:44px">sidebar</div>
+          <div class="blk g" style="height:22px">footer</div>
+        </div>`;
+      if (vp === 'tablet') return `
+        <div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto 1fr auto;gap:4px;width:100%;height:100%">
+          <div class="blk p" style="grid-column:1/-1;height:26px">header</div>
+          <div class="blk" style="height:100px">main</div>
+          <div class="blk" style="height:100px">aside</div>
+          <div class="blk g" style="grid-column:1/-1;height:22px">footer</div>
+        </div>`;
+      return `
+        <div style="display:grid;grid-template-columns:80px 1fr 60px;grid-template-rows:auto 1fr auto;gap:4px;width:100%;height:100%">
+          <div class="blk p" style="grid-column:1/-1;height:22px">header</div>
+          <div class="blk" style="height:90px">sidebar</div>
+          <div class="blk" style="height:90px">main</div>
+          <div class="blk" style="height:90px">aside</div>
+          <div class="blk g" style="grid-column:1/-1;height:20px">footer</div>
+        </div>`;
+    },
+    html(vp) {
+      return `<span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"layout"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;header&gt;</span>Header<span class="tag">&lt;/header&gt;</span>
+  <span class="tag">&lt;nav</span> <span class="prop">class</span>=<span class="str">"sidebar"</span><span class="tag">&gt;</span>Sidebar<span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;main&gt;</span>Main<span class="tag">&lt;/main&gt;</span>
+  <span class="tag">&lt;aside&gt;</span>Aside<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>Footer<span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`;
+    },
+    css(vp) {
+      if (vp === 'mobile') return `.layout {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="val">1fr</span>;
+  <span class="prop">gap</span>: <span class="val">1rem</span>;
+  <span class="prop">grid-template-areas</span>:
+    <span class="str">"header"</span>
+    <span class="str">"main"</span>
+    <span class="str">"sidebar"</span>
+    <span class="str">"footer"</span>;
+}
+<span class="tag">header</span> { <span class="prop">grid-area</span>: <span class="val">header</span>; }
+<span class="tag">main</span>   { <span class="prop">grid-area</span>: <span class="val">main</span>; }
+.sidebar{ <span class="prop">grid-area</span>: <span class="val">sidebar</span>; }
+<span class="tag">footer</span> { <span class="prop">grid-area</span>: <span class="val">footer</span>; }`;
+      if (vp === 'tablet') return `.layout {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="val">2fr 1fr</span>;
+  <span class="prop">grid-template-rows</span>: <span class="val">auto 1fr auto</span>;
+  <span class="prop">gap</span>: <span class="val">1rem</span>;
+  <span class="prop">grid-template-areas</span>:
+    <span class="str">"header header"</span>
+    <span class="str">"main   aside"</span>
+    <span class="str">"footer footer"</span>;
+}`;
+      return `.layout {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="val">220px 1fr 160px</span>;
+  <span class="prop">grid-template-rows</span>: <span class="val">auto 1fr auto</span>;
+  <span class="prop">gap</span>: <span class="val">1rem</span>;
+  <span class="prop">min-height</span>: <span class="val">100dvh</span>;
+  <span class="prop">grid-template-areas</span>:
+    <span class="str">"header  header  header"</span>
+    <span class="str">"sidebar main    aside"</span>
+    <span class="str">"footer  footer  footer"</span>;
+}
+<span class="tag">header</span>  { <span class="prop">grid-area</span>: <span class="val">header</span>; }
+.sidebar { <span class="prop">grid-area</span>: <span class="val">sidebar</span>; }
+<span class="tag">main</span>    { <span class="prop">grid-area</span>: <span class="val">main</span>; }
+<span class="tag">aside</span>   { <span class="prop">grid-area</span>: <span class="val">aside</span>; }
+<span class="tag">footer</span>  { <span class="prop">grid-area</span>: <span class="val">footer</span>; }`;
+    }
+  },
+  holygrail: {
+    pills: ['display: grid', 'grid-template-areas', '5-area classic'],
+    preview(vp) {
+      if (vp === 'mobile') return `
+        <div style="display:grid;gap:3px;width:100%;height:100%">
+          <div class="blk p" style="height:24px">header</div>
+          <div class="blk" style="height:28px">nav</div>
+          <div class="blk" style="height:70px">main</div>
+          <div class="blk" style="height:28px">sidebar</div>
+          <div class="blk g" style="height:22px">footer</div>
+        </div>`;
+      return `
+        <div style="display:grid;grid-template-columns:60px 1fr 60px;grid-template-rows:auto auto 1fr auto;gap:3px;width:100%;height:100%">
+          <div class="blk p" style="grid-column:1/-1;height:22px">header</div>
+          <div class="blk" style="grid-column:1/-1;height:18px">nav</div>
+          <div class="blk" style="height:80px">left</div>
+          <div class="blk" style="height:80px">main</div>
+          <div class="blk" style="height:80px">right</div>
+          <div class="blk g" style="grid-column:1/-1;height:20px">footer</div>
+        </div>`;
+    },
+    html(_) { return `<span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"holy-grail"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;header&gt;</span>Header<span class="tag">&lt;/header&gt;</span>
+  <span class="tag">&lt;nav&gt;</span>Nav<span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;aside</span> <span class="prop">class</span>=<span class="str">"left"</span><span class="tag">&gt;</span>Left<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;main&gt;</span>Main Content<span class="tag">&lt;/main&gt;</span>
+  <span class="tag">&lt;aside</span> <span class="prop">class</span>=<span class="str">"right"</span><span class="tag">&gt;</span>Right<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>Footer<span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`; },
+    css(_) { return `.holy-grail {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="val">200px 1fr 200px</span>;
+  <span class="prop">grid-template-rows</span>: <span class="val">auto auto 1fr auto</span>;
+  <span class="prop">min-height</span>: <span class="val">100dvh</span>;
+  <span class="prop">gap</span>: <span class="val">1rem</span>;
+  <span class="prop">grid-template-areas</span>:
+    <span class="str">"header header header"</span>
+    <span class="str">"nav    nav    nav"</span>
+    <span class="str">"left   main   right"</span>
+    <span class="str">"footer footer footer"</span>;
+}
+<span class="tag">header</span> { <span class="prop">grid-area</span>: <span class="val">header</span>; }
+<span class="tag">nav</span>    { <span class="prop">grid-area</span>: <span class="val">nav</span>; }
+.left  { <span class="prop">grid-area</span>: <span class="val">left</span>; }
+<span class="tag">main</span>   { <span class="prop">grid-area</span>: <span class="val">main</span>; }
+.right { <span class="prop">grid-area</span>: <span class="val">right</span>; }
+<span class="tag">footer</span> { <span class="prop">grid-area</span>: <span class="val">footer</span>; }
+
+<span class="kw">@media</span> (max-width: <span class="val">768px</span>) {
+  .holy-grail {
+    <span class="prop">grid-template-columns</span>: <span class="val">1fr</span>;
+    <span class="prop">grid-template-areas</span>:
+      <span class="str">"header"</span> <span class="str">"nav"</span> <span class="str">"main"</span>
+      <span class="str">"left"</span> <span class="str">"right"</span> <span class="str">"footer"</span>;
+  }
+}`; }
+  },
+  cards: {
+    pills: ['auto-fit', 'minmax()', 'responsive no media queries'],
+    preview(_) {
+      return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(60px,1fr));gap:5px;width:100%">
+        ${[1,2,3,4].map(i=>`<div class="blk" style="height:56px;flex-direction:column;gap:3px"><span style="font-size:9px;color:var(--accent)">card ${i}</span></div>`).join('')}
+      </div>`;
+    },
+    html(_) { return `<span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card-grid"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card"</span><span class="tag">&gt;</span>Card 1<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card"</span><span class="tag">&gt;</span>Card 2<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card"</span><span class="tag">&gt;</span>Card 3<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">class</span>=<span class="str">"card"</span><span class="tag">&gt;</span>Card 4<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`; },
+    css(_) { return `.card-grid {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>:
+    <span class="val">repeat(auto-fit, minmax(240px, 1fr))</span>;
+  <span class="prop">gap</span>: <span class="val">1.5rem</span>;
+}
+<span class="cmt">/* Cards fill available space */</span>
+<span class="cmt">/* No media queries needed!  */</span>
+.card {
+  <span class="prop">padding</span>: <span class="val">1.5rem</span>;
+  <span class="prop">border-radius</span>: <span class="val">12px</span>;
+  <span class="prop">border</span>: <span class="val">1px solid rgba(255,255,255,0.1)</span>;
+}`; }
+  }
+};
+
+function renderLayout() {
+  const { viewport: vp, layout: ly, code } = lstate;
+  const def = defs[ly];
+  document.getElementById('info-strip').innerHTML = def.pills.map(p => `<span class="info-pill">${p}</span>`).join('');
+  document.getElementById('vp-label').textContent = vpLabels[vp];
+
+  const stage = document.getElementById('preview-stage');
+  const frame = document.createElement('div');
+  frame.className = 'device-frame';
+  frame.style.width = vpSizes[vp];
+  frame.style.height = vpHeights[vp];
+  const inner = document.createElement('div');
+  inner.className = 'layout-inner';
+  inner.style.height = vpHeights[vp];
+  inner.innerHTML = def.preview(vp);
+  frame.appendChild(inner);
+  stage.innerHTML = '';
+  stage.appendChild(frame);
+
+  document.getElementById('code-display').innerHTML = def[code](vp);
+}
+
+document.getElementById('viewport-group').addEventListener('click', e => {
+  const btn = e.target.closest('[data-viewport]');
+  if (!btn) return;
+  lstate.viewport = btn.dataset.viewport;
+  document.querySelectorAll('[data-viewport]').forEach(b => b.classList.toggle('active', b === btn));
+  renderLayout();
+});
+document.getElementById('layout-group').addEventListener('click', e => {
+  const btn = e.target.closest('[data-layout]');
+  if (!btn) return;
+  lstate.layout = btn.dataset.layout;
+  document.querySelectorAll('[data-layout]').forEach(b => b.classList.toggle('active', b === btn));
+  renderLayout();
+});
+document.querySelectorAll('.code-tab[data-code]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    lstate.code = tab.dataset.code;
+    document.querySelectorAll('.code-tab[data-code]').forEach(t => t.classList.toggle('active', t === tab));
+    renderLayout();
+  });
+});
+
+// Copy button
+document.getElementById('copy-btn').addEventListener('click', function() {
+  const raw = document.getElementById('code-display').innerText;
+  navigator.clipboard.writeText(raw).then(() => {
+    this.textContent = 'Copied!';
+    this.classList.add('copied');
+    setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
+  });
+});
+
+renderLayout();
+
+// ─── Flexbox Demo ────────────────────────────────────────────
+function updateFlexDemo() {
+  const j = document.getElementById('flex-justify').value;
+  const a = document.getElementById('flex-align').value;
+  const d = document.getElementById('flex-dir').value;
+  const w = document.getElementById('flex-wrap').value;
+  const demo = document.getElementById('flex-demo');
+  demo.style.justifyContent = j;
+  demo.style.alignItems = a;
+  demo.style.flexDirection = d;
+  demo.style.flexWrap = w;
+  document.getElementById('flex-code-out').innerHTML =
+    `<span class="tag">.container</span> {\n  <span class="prop">display</span>: <span class="val">flex</span>;\n  <span class="prop">justify-content</span>: <span class="val">${j}</span>;\n  <span class="prop">align-items</span>: <span class="val">${a}</span>;\n  <span class="prop">flex-direction</span>: <span class="val">${d}</span>;\n  <span class="prop">flex-wrap</span>: <span class="val">${w}</span>;\n}`;
+}
+function copyFlexCode() {
+  const raw = document.getElementById('flex-code-out').innerText;
+  navigator.clipboard.writeText(raw).then(() => {
+    const btn = document.getElementById('flex-copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1800);
+  });
+}
+function copyText(t) {
+  navigator.clipboard.writeText(t);
+}
+updateFlexDemo();
+</script>
+</body>
+</html>
